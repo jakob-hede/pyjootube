@@ -4,7 +4,7 @@ from ytapi.runnor import  OAuthRunnor
 def main():
     runnor = OAuthRunnor()
     # runnor.show_default_channel_info()
-    runnor.show_brief_channel_info()
+    runnor.do_authorize()
 
 
 if __name__ == "__main__":

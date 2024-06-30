@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import yaml
 from pyyoutube import Client
 
@@ -5,6 +7,14 @@ from pyyoutube import Client
 class Runnor:
     API_KEY = "xyz"  # replace this with your api key.
     default_channel_id = 'UCr3iIpV6Rl3nG0FXCfGXgxQ'  # jakobs kanal
+
+    def __init__(self, secrets_file=None):
+        super().__init__()
+        if secrets_file is None:
+            secrets_file = '/opt/projects/jesper/jesper_project/secrets/secrets.yaml'
+        self.secrets = yaml.safe_load(Path(secrets_file).read_text())
+        self.API_KEY = self.secrets['youtube']['api_key']
+        object
     # channel_id = "UC_x5XG1OV2P6uZZ5FSM9Ttw" # default google developers channel
 
 
@@ -64,23 +74,30 @@ class PublicRunnor(Runnor):
         item0_yaml_str = yaml.dump(item0_dict, default_flow_style=False)
         print(f'\nChannel info \n{item0_yaml_str}')
 
-# class OAuthRunnor(Runnor):
-#     CLIENT_ID = "xxx"  # Your app id
-#     CLIENT_SECRET = "xxx"  # Your app secret
-#     # CLIENT_SECRET_PATH = None  # or your path/to/client_secret_web.json
-#
-#     SCOPE = [
-#         "https://www.googleapis.com/auth/youtube",
-#         "https://www.googleapis.com/auth/youtube.force-ssl",
-#         "https://www.googleapis.com/auth/userinfo.profile",
-#     ]
-#
-#     def __init__(self):
-#         super().__init__()
-#         print('OAuthRunnor')
-#
-#     def do_authorize(self):
-#         cli = Client(client_id=self.CLIENT_ID, client_secret=self.CLIENT_SECRET)
+
+class OAuthRunnor(Runnor):
+    CLIENT_ID = "xxx"  # Your app id
+    CLIENT_SECRET = "xxx"  # Your app secret
+    # CLIENT_SECRET_PATH = None  # or your path/to/client_secret_web.json
+
+    SCOPE = [
+        "https://www.googleapis.com/auth/youtube",
+        "https://www.googleapis.com/auth/youtube.force-ssl",
+        "https://www.googleapis.com/auth/userinfo.profile",
+    ]
+
+    def __init__(self):
+        super().__init__()
+        print('OAuthRunnor')
+        self.CLIENT_ID = self.secrets['youtube']['client_id']
+        self.CLIENT_SECRET = self.secrets['youtube']['client_secret']
+
+
+    def do_authorize(self):
+        print('do_authorize')
+
+
+        cli = Client(client_id=self.CLIENT_ID, client_secret=self.CLIENT_SECRET)
 #         # or if you want to use a web type client_secret.json
 #         # cli = Client(client_secret_path=CLIENT_SECRET_PATH)
 #
