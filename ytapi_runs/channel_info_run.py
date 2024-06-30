@@ -3,6 +3,8 @@ from ytapi.runnor import Runnor
 
 def main():
     runnor = Runnor()
+    # runnor.show_default_channel_info()
+    runnor.show_brief_channel_info()
 
 
 if __name__ == "__main__":
