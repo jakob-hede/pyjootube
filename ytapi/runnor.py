@@ -3,7 +3,7 @@ from pyyoutube import Client
 
 
 class Runnor:
-    API_KEY = "AIzaSyBbEoFYabI_59-Wrtyt98F6fG05HNX3XeQ"  # replace this with your api key.
+    API_KEY = "xyz"  # replace this with your api key.
     default_channel_id = 'UCr3iIpV6Rl3nG0FXCfGXgxQ'  # jakobs kanal
     # channel_id = "UC_x5XG1OV2P6uZZ5FSM9Ttw" # default google developers channel
 
@@ -11,7 +11,7 @@ class Runnor:
 class PublicRunnor(Runnor):
     def __init__(self):
         super().__init__()
-        print('Runnor')
+        print('PublicRunnor')
         self.cli = Client(api_key=self.API_KEY)
 
     def get_response_dict(self, channel_id=None, parts=None):
@@ -63,6 +63,38 @@ class PublicRunnor(Runnor):
 
         item0_yaml_str = yaml.dump(item0_dict, default_flow_style=False)
         print(f'\nChannel info \n{item0_yaml_str}')
+
+# class OAuthRunnor(Runnor):
+#     CLIENT_ID = "xxx"  # Your app id
+#     CLIENT_SECRET = "xxx"  # Your app secret
+#     # CLIENT_SECRET_PATH = None  # or your path/to/client_secret_web.json
+#
+#     SCOPE = [
+#         "https://www.googleapis.com/auth/youtube",
+#         "https://www.googleapis.com/auth/youtube.force-ssl",
+#         "https://www.googleapis.com/auth/userinfo.profile",
+#     ]
+#
+#     def __init__(self):
+#         super().__init__()
+#         print('OAuthRunnor')
+#
+#     def do_authorize(self):
+#         cli = Client(client_id=self.CLIENT_ID, client_secret=self.CLIENT_SECRET)
+#         # or if you want to use a web type client_secret.json
+#         # cli = Client(client_secret_path=CLIENT_SECRET_PATH)
+#
+#         authorize_url, state = cli.get_authorize_url(scope=self.SCOPE)
+#         print(f"Click url to do authorize: {authorize_url}")
+#
+#         response_uri = input("Input youtube redirect uri:\n")
+#
+#         token = cli.generate_access_token(authorization_response=response_uri, scope=self.SCOPE)
+#         print(f"Your token: {token}")
+#
+#         # get data
+#         resp = cli.channels.list(mine=True)
+#         print(f"Your channel id: {resp.items[0].id}
 
 
 # region fluff
