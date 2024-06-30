@@ -76,9 +76,65 @@ class PublicRunnor(Runnor):
 
 
 class OAuthRunnor(Runnor):
-    CLIENT_ID = "xxx"  # Your app id
-    CLIENT_SECRET = "xxx"  # Your app secret
-    # CLIENT_SECRET_PATH = None  # or your path/to/client_secret_web.json
+    def __init__(self):
+        super().__init__()
+        print('OAuthRunnor')
+
+    def upload(self):
+        print('upload')
+
+
+'''
+"""
+    This example demonstrates how to upload a video.
+"""
+
+import pyyoutube.models as mds
+from pyyoutube import Client
+from pyyoutube.media import Media
+
+# Access token with scope:
+# https://www.googleapis.com/auth/youtube.upload
+# https://www.googleapis.com/auth/youtube
+# https://www.googleapis.com/auth/youtube.force-ssl
+ACCESS_TOKEN = "xxx"
+
+
+def upload_video():
+    cli = Client(access_token=ACCESS_TOKEN)
+
+    body = mds.Video(
+        snippet=mds.VideoSnippet(title="video title", description="video description")
+    )
+
+    media = Media(filename="target_video.mp4")
+
+    upload = cli.videos.insert(
+        body=body, media=media, parts=["snippet"], notify_subscribers=True
+    )
+
+    response = None
+    while response is None:
+        print(f"Uploading video...")
+        status, response = upload.next_chunk()
+        if status is not None:
+            print(f"Uploading video progress: {status.progress()}...")
+
+    # Use video class to representing the video resource.
+    video = mds.Video.from_dict(response)
+    print(f"Video id {video.id} was successfully uploaded.")
+
+
+if __name__ == "__main__":
+    upload_video()
+
+'''
+
+
+class XyzOAuthRunnor(Runnor):
+    # CLIENT_ID = "xxx"  # Your app id
+    # CLIENT_SECRET = "xxx"  # Your app secret
+    CLIENT_SECRET_PATH = '/opt/projects/jesper/jesper_project/secrets/client_secret.json'  # or your path/to/client_secret_web.json
 
     SCOPE = [
         "https://www.googleapis.com/auth/youtube",
@@ -89,15 +145,30 @@ class OAuthRunnor(Runnor):
     def __init__(self):
         super().__init__()
         print('OAuthRunnor')
-        self.CLIENT_ID = self.secrets['youtube']['client_id']
-        self.CLIENT_SECRET = self.secrets['youtube']['client_secret']
-
+        # self.CLIENT_ID = self.secrets['youtube']['client_id']
+        # self.CLIENT_SECRET = self.secrets['youtube']['client_secret']
 
     def do_authorize(self):
         print('do_authorize')
+        # cli = Client(client_id=self.CLIENT_ID, client_secret=self.CLIENT_SECRET)
+        cli = Client(client_secret_path=self.CLIENT_SECRET_PATH)
+        # response_uri = 'https://mediahead.dk/'
+        # authorize_url, state = cli.get_authorize_url(scope=self.SCOPE, redirect_uri=response_uri)
+        authorize_url, state = cli.get_authorize_url(scope=self.SCOPE)
+        print(f"Click url to do authorize: {authorize_url}")
+        # input("trut!")
+
+        response_uri = input("Input youtube redirect uri:\n")
+        # response_uri = 'https://localhost/'
+
+        token = cli.generate_access_token(authorization_response=response_uri, scope=self.SCOPE)
+        print(f"Your token: {token}")
+
+        # get data
+        resp = cli.channels.list(mine=True)
+        print(f"Your channel id: {resp.items[0].id}")
 
 
-        cli = Client(client_id=self.CLIENT_ID, client_secret=self.CLIENT_SECRET)
 #         # or if you want to use a web type client_secret.json
 #         # cli = Client(client_secret_path=CLIENT_SECRET_PATH)
 #
