@@ -1,8 +1,8 @@
-from ytapi.runnor import Runnor
+from ytapi.runnor import PublicRunnor
 
 
 def main():
-    runnor = Runnor()
+    runnor = PublicRunnor()
     # runnor.show_default_channel_info()
     runnor.show_brief_channel_info()
 
