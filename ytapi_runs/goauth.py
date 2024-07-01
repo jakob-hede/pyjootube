@@ -8,6 +8,7 @@ from googleapiclient.discovery import build
 CLIENT_SECRETS_FILE = "/opt/projects/jesper/jesper_project/secrets/ori.client_secret.json"
 SCOPES = [
     "https://www.googleapis.com/auth/youtube",
+    "https://www.googleapis.com/auth/youtube.upload",
     "https://www.googleapis.com/auth/youtube.force-ssl",
     "https://www.googleapis.com/auth/userinfo.profile",
 ]

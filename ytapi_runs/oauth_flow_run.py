@@ -1,4 +1,4 @@
-from ytapi.runnor import  OAuthRunnor
+from ytapi.oauth_runnor import OAuthRunnor
 
 
 def main():
